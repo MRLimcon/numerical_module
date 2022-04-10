@@ -11,17 +11,18 @@ module solver
       integer :: i, j
 
       array(:, 1) = ic
+      velocity = 0
 
       do i = 2, sol_len, 1
 
-        acceleration(1) = (array(2, i-1) - array(1, i-1))
-        acceleration(ic_len) = (array(ic_len-1, i-1) - array(ic_len, i-1))
+        acceleration(1) = (array(2, i-1) - array(1, i-1))*(c/delta_x)
+        acceleration(ic_len) = (array(ic_len-1, i-1) - array(ic_len, i-1))*(c/delta_x)
         do j = 2, ic_len-1, 1
-          acceleration(j) = (array(j-1, i-1)-array(j, i-1)) &
-            + (array(j+1, i-1)-array(j, i-1))
+          acceleration(j) = ( array(j-1, i-1) + array(j+1, i-1) &
+            - (2*array(j, i-1)) )*(c**2)/(delta_x**2)
         end do
 
-        acceleration = acceleration*(c**2)/(delta_x**2)
+        acceleration = acceleration
         velocity(:, i) = velocity(:, i-1) + (acceleration*delta_t)
         array(:, i) = array(:, i-1) + (velocity(:, i)*delta_t)
 

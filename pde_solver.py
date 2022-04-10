@@ -7,7 +7,7 @@ def solve_wave_equation(
     steps: tuple[float],
     max_time: float,
     type: str,
-    velocity: float
+    velocity: float = 1.
 ) -> np.ndarray:
     length = int(max_time/steps[0])
     ic_len = len(initial_condition)

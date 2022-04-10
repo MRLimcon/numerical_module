@@ -18,12 +18,16 @@ module create_array
       integer, intent(in) :: lenx
       real :: array(lenx)
 
+      array = 0
+
     end function zeros_1d
 
     function zeros_2d(lenx, leny) result(array)
       implicit none
       integer, intent(in) :: lenx, leny
       real :: array(leny, lenx)
+
+      array = 0
 
     end function zeros_2d
 
