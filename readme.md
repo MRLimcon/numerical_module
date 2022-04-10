@@ -1,7 +1,7 @@
 # FPy
-## The FORTRAN Intrinsics To Python
+## The FORTRAN Intrinsics In Python
 
-  A project trying to bring, to Python, fast implementations of very used functions.
+  A project trying to bring fast implementations of usual, but slow functions.
 
 # Dependencies
 - GCC
