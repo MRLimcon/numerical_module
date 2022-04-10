@@ -16,4 +16,4 @@ def filter_outliers(
         vector=series, lenx=len(series), std_in=std).astype(dtype=np.bool)
 
     filtered_dataframe = dataframe[bool_series]
-    return filtered_dataframe
+    return filtered_dataframe.reset_index(drop=True)
