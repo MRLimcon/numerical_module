@@ -6,6 +6,7 @@
 # Dependencies
 - GCC
 - Numpy
+- Pandas
 - Linux
 
 # Installation

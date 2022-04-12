@@ -15,6 +15,6 @@ for folder in folders:
         output_file_name = file_name.replace(".f95", "")
         os.system(f"cd {folder} && f2py -c \
             --opt='-O3 -ftree-vectorize -march=native -fno-range-check \
-                -floop-nest-optimize -fPIC' \
+                -floop-nest-optimize -fPIC -pipe' \
             {file_name} -m {output_file_name}")
-        # -lgomp \ -fopenmp  -DF2PY_REPORT_ATEXIT (interesting flags)
+        # -lgomp -ffast-math -fopenmp  -DF2PY_REPORT_ATEXIT (interesting flags)
