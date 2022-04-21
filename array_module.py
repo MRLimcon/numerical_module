@@ -3,7 +3,7 @@ import arrays.operations as array_operations
 import numpy as np
 
 
-def range(min: float, max: float, delta: float) -> np.ndarray:
+def arange(min: float, max: float, delta: float) -> np.ndarray:
     """
         Create range from the min, to the max, with an step of delta
     """
@@ -21,6 +21,15 @@ def zeros(shape: tuple[int]) -> np.ndarray:
         return create_array.create_array.zeros_1d(shape[0])
     elif len(shape) == 2:
         return create_array.create_array.zeros_2d(shape[0], shape[1])
+
+
+def random_text(list_size: int, string_size: int) -> np.ndarray:
+    """
+        Create an array of size list_size with random text of size string_size
+    """
+    array = create_array.create_array.generate_random_text(
+                string_len=string_size, array_len=list_size)
+    return [bytes(val).decode() for val in array]
 
 
 def repeat(obj: any, amount_of_times: int) -> np.ndarray:
@@ -42,6 +51,25 @@ def repeat(obj: any, amount_of_times: int) -> np.ndarray:
             bool_val=obj, length=amount_of_times)
 
 
+def sort(array: np.ndarray) -> np.ndarray:
+    """
+        Return sorted array, using quicksort method from AdAstra1 gist repo:
+        https://gist.github.com/1AdAstra1
+    """
+    array_to_sort = np.array(array)
+    array_operations.array_operations.quicksort(array_to_sort)
+    return array_to_sort
+
+
+def get_probability_density(array: np.ndarray, bins: int = 10) -> tuple[np.ndarray, np.ndarray]:
+    """
+        Function that returns a tuple of the probability density of an array
+    """
+    density = array_operations.array_operations.calculate_prob_density(
+        array=array, len_array=len(array), bins=bins-1)
+    return density[0], density[1]
+
+
 def gaussian(avg: float, std: float, shape: tuple[int]) -> np.ndarray:
     """
         Create an array with values ranging inside an gaussian distribution,
@@ -61,7 +89,7 @@ def meshgrid(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray]:
     """
     array = array_operations.array_operations.meshgrid(
         x=x.T, y=y.T, lenx=len(x), leny=len(y))
-    return array[:, :, 0], array[:, :, 1]
+    return array[:, :, 0].T, array[:, :, 1].T
 
 
 def get_zvalue(x: np.ndarray) -> tuple[np.ndarray, float, float]:

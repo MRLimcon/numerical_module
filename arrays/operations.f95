@@ -1,6 +1,89 @@
 module array_operations
   contains
 
+    recursive subroutine quicksort(array)
+      ! from 1AdAstra1 gist repo https://gist.github.com/1AdAstra1
+      ! file: https://gist.github.com/1AdAstra1/6f7785373efe5bb6c254d2e20c78ccc4
+      implicit none
+
+      real, intent(inout) :: array(:)
+      real :: x, t
+      integer :: first = 1, last, i, j
+
+      last = size(array, 1)
+      x = array( (first+last) / 2 )
+      i = first
+      j = last
+
+      do
+         do while (array(i) < x)
+            i=i+1
+         end do
+         do while (x < array(j))
+            j=j-1
+         end do
+         if (i >= j) exit
+         t = array(i);  array(i) = array(j);  array(j) = t
+         i=i+1
+         j=j-1
+      end do
+
+      if (first < i-1) call quicksort(array(first : i-1))
+      if (j+1 < last)  call quicksort(array(j+1 : last))
+    end subroutine quicksort
+
+    function calculate_prob_density(array, len_array, bins) result(result_array)
+      implicit none
+      integer, intent(in) :: len_array, bins
+      real, intent(in) :: array(len_array)
+      integer :: i, j, integer_values(bins)
+      real :: result_array(2, bins+1), temp_array(len_array), sum_array(len_array)
+      real :: min_value, max_value, delta, temp
+
+      temp_array = array
+      sum_array = 0
+      result_array = 0
+      j = 1
+
+      call quicksort(temp_array)
+
+      max_value = temp_array(len_array)
+      min_value = temp_array(1)
+      delta = (max_value-min_value)/(bins+1)
+      temp = j*delta + min_value
+
+      do i = 1, len_array, 1
+        if ( temp_array(i) <= temp .and. temp_array(i+1) > temp ) then
+          result_array(1, j) = temp_array(i)
+          integer_values(j) = i
+          j = j+1
+          temp = j*delta + min_value
+        elseif ( i == len_array ) then
+          result_array(1, bins) = temp_array(len_array)
+          integer_values(bins) = len_array
+        end if
+      end do
+
+      result_array(1, 2:bins+1) = result_array(1, 1:bins)
+      result_array(2, 1) = 0
+      result_array(1, 1) = min_value
+
+      do i = 2, len_array, 1
+        sum_array(i) = sum_array(i-1) + 1
+      end do
+      sum_array = sum_array/maxval(sum_array)
+
+      do i = 1, bins, 1
+        j = integer_values(i)
+        result_array(2, i+1) = sum_array(j)
+      end do
+
+      result_array(2, 2:bins+1) = (result_array(2, 2:bins+1) - result_array(2, 1:bins))&
+              / delta
+
+
+    end function calculate_prob_density
+
     function get_zvalue_1d(vector, lenx) result(transformed_vector)
       implicit none
       integer, intent(in) :: lenx
@@ -32,7 +115,6 @@ module array_operations
     function meshgrid(x, lenx, y, leny) result(array)
       implicit none
       integer, intent(in) :: lenx, leny
-      integer :: i
       real, intent(in) :: x(lenx), y(leny)
       real :: array(lenx, leny, 2)
 
@@ -46,9 +128,16 @@ module array_operations
       real, intent(in) :: x(lenx), steps
       real :: vector(lenx)
 
-      vector = 0
-      vector(2:lenx) = x(2:lenx)-x(1:lenx-1)
-      vector = vector/steps
+      if ( abs(steps - 1) < 0.0001 ) then
+        vector = 0
+        vector(2:lenx) = x(2:lenx)-x(1:lenx-1)
+      else
+        vector(1) = x(2)-x(1)
+        vector(lenx) = -(x(lenx-1)-x(lenx))
+        vector(2:lenx-1) = (x(3:lenx)-x(1:lenx-2))/2
+        vector = vector/steps
+      end if
+
     end function get_vector_changes
 
     function get_gradient_2d(x, lenx, leny, stepsx, stepsy) result(array)
@@ -69,18 +158,15 @@ module array_operations
       real, intent(in) :: x(lenx), steps
       real :: vector(lenx)
 
-      vector(1) = (x(2) - x(1))/steps
-      vector(lenx) = (x(lenx-1) - x(lenx))/steps
-      do i = 2, lenx-1, 1
-        vector(i) = (x(i+1) + x(i-1) - (2*x(i)))/(steps**2)
-      end do
-      vector = vector
+      vector(1) = ( x(2) - x(1) )
+      vector(lenx) = (x(lenx-1) - x(lenx))
+      vector(2:lenx-1) = x(3:lenx) + x(1:lenx-2) - (2*x(2:lenx-1))
+      vector = vector/(steps**2)
     end function get_acceleration_1d
 
     function repeat_string(string_val, string_length, length) result(array)
       implicit none
       integer, intent(in) :: length, string_length
-      integer :: i
       character, intent(in) :: string_val(string_length)
       character :: array(length, string_length)
 
@@ -91,7 +177,6 @@ module array_operations
     function repeat_integer(int_val, length) result(array)
       implicit none
       integer, intent(in) :: length, int_val
-      integer :: i
       integer :: array(length)
 
       array = spread(int_val, 1, length)
@@ -102,7 +187,6 @@ module array_operations
       implicit none
       integer, intent(in) :: length
       real, intent(in) :: float_val
-      integer :: i
       real :: array(length)
 
       array = spread(float_val, 1, length)
@@ -113,7 +197,6 @@ module array_operations
       implicit none
       integer, intent(in) :: length
       logical, intent(in) :: bool_val
-      integer :: i
       logical :: array(length)
 
       array = spread(bool_val, 1, length)
