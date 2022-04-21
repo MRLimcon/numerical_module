@@ -31,6 +31,24 @@ module create_array
 
     end function zeros_2d
 
+    function generate_random_text(string_len, array_len) result(array)
+      implicit none
+      integer, intent(in) :: string_len, array_len
+      real :: x(array_len, string_len)
+      integer :: int_array(array_len, string_len), i, j
+      character :: array(array_len, string_len)
+
+      call random_number(x)
+      int_array = (x*94) + 33
+
+      do i = 1, array_len, 1
+        do j = 1, string_len, 1
+          array(i, j) = char(int_array(i, j))
+        end do
+      end do
+
+    end function generate_random_text
+
     function rand_uniform_1d(lenx, min, max) result(array)
       implicit none
       integer, intent(in) :: lenx
