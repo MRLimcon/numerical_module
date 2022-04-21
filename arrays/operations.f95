@@ -36,51 +36,27 @@ module array_operations
       implicit none
       integer, intent(in) :: len_array, bins
       real, intent(in) :: array(len_array)
-      integer :: i, j, integer_values(bins)
-      real :: result_array(2, bins+1), temp_array(len_array), sum_array(len_array)
-      real :: min_value, max_value, delta, temp
+      integer :: i, integer_values(bins)
+      real :: result_array(2, bins+1), temp_array(len_array)
+      real :: min_value, max_value, delta, temp(2)
 
       temp_array = array
-      sum_array = 0
       result_array = 0
-      j = 1
 
-      call quicksort(temp_array)
-
-      max_value = temp_array(len_array)
-      min_value = temp_array(1)
+      max_value = maxval(temp_array)
+      min_value = minval(temp_array)
       delta = (max_value-min_value)/(bins+1)
-      temp = j*delta + min_value
 
-      do i = 1, len_array, 1
-        if ( temp_array(i) <= temp .and. temp_array(i+1) > temp ) then
-          result_array(1, j) = temp_array(i)
-          integer_values(j) = i
-          j = j+1
-          temp = j*delta + min_value
-        elseif ( i == len_array ) then
-          result_array(1, bins) = temp_array(len_array)
-          integer_values(bins) = len_array
-        end if
+      do i = 1, bins+1, 1
+        temp(1) = (i-1)*delta + min_value
+        temp(2) = (i)*delta + min_value
+        result_array(1, i) = (temp(1) + temp(2))/2
+        result_array(2, i) = size(pack(temp_array, &
+          temp_array >= temp(1) .and. temp_array < temp(2) &
+        ))
       end do
 
-      result_array(1, 2:bins+1) = result_array(1, 1:bins)
-      result_array(2, 1) = 0
-      result_array(1, 1) = min_value
-
-      do i = 2, len_array, 1
-        sum_array(i) = sum_array(i-1) + 1
-      end do
-      sum_array = sum_array/maxval(sum_array)
-
-      do i = 1, bins, 1
-        j = integer_values(i)
-        result_array(2, i+1) = sum_array(j)
-      end do
-
-      result_array(2, 2:bins+1) = (result_array(2, 2:bins+1) - result_array(2, 1:bins))&
-              / delta
-
+      result_array(2, :) = result_array(2, :)/(len_array*delta)
 
     end function calculate_prob_density
 
