@@ -1,4 +1,4 @@
-import solvers.pde_solver as pde_solver
+import pde_solver
 import numpy as np
 
 
