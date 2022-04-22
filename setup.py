@@ -1,8 +1,6 @@
 from numpy.distutils.misc_util import Configuration
 from numpy.distutils.core import setup as setup
 from numpy.distutils.core import Extension
-import test_numerical_package
-
 
 ext_modules = [
     Extension('create_array', sources=['arrays/create_array.f95']),
@@ -25,7 +23,7 @@ setup(
         'dataframe_utils.py',
         'pde_solver.py'
     ],
-    # url='http://pypi.python.org/pypi/PackageName/',
+    url='https://github.com/MRLimcon/numerical_module',
     license='LICENSE.txt',
     description='An awesome package that does something',
     long_description=open('readme.md').read(),
