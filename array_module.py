@@ -1,5 +1,5 @@
-import arrays.create_array as create_array
-import arrays.operations as array_operations
+import create_array
+import array_operations
 import numpy as np
 
 

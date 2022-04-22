@@ -1,5 +1,5 @@
 import pandas as pd
-import arrays.operations as array_operations
+import array_operations
 import numpy as np
 
 
