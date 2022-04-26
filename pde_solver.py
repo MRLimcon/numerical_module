@@ -1,4 +1,4 @@
-import pde_solver
+import simple_numerical_package.fortran_bins.pde_solver as pde_solver
 import numpy as np
 
 

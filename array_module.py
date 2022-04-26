@@ -1,5 +1,5 @@
-import create_array
-import array_operations
+import simple_numerical_package.fortran_bins.create_array as create_array
+import simple_numerical_package.fortran_bins.array_operations as array_operations
 import numpy as np
 
 

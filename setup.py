@@ -3,9 +3,12 @@ from numpy.distutils.core import setup as setup
 from numpy.distutils.core import Extension
 
 ext_modules = [
-    Extension('create_array', sources=['arrays/create_array.f95']),
-    Extension("array_operations", sources=['arrays/operations.f95']),
-    Extension("solvers", sources=['solvers/pde_solver.f95']),
+    Extension("simple_numerical_package.fortran_bins.create_array",
+              sources=['arrays/create_array.f95']),
+    Extension("simple_numerical_package.fortran_bins.array_operations",
+              sources=['arrays/operations.f95']),
+    Extension("simple_numerical_package.fortran_bins.pde_solver",
+              sources=['solvers/pde_solver.f95']),
 ]
 
 
