@@ -9,6 +9,8 @@ ext_modules = [
               sources=['arrays/operations.f95']),
     Extension("simple_numerical_package.fortran_bins.pde_solver",
               sources=['solvers/pde_solver.f95']),
+    Extension("simple_numerical_package.fortran_bins.optimizer",
+              sources=['solvers/optimizer.f95']),
 ]
 
 
@@ -24,11 +26,12 @@ setup(
     scripts=[
         'array_module.py',
         'dataframe_utils.py',
-        'pde_solver.py'
+        'pde_solver.py',
+        'optimizer.py'
     ],
     url='https://github.com/MRLimcon/numerical_module',
     license='LICENSE.txt',
-    description='An awesome package that does something',
+    description='A simple and fast numerical package.',
     long_description=open('readme.md').read(),
     configuration=configuration,
     ext_modules=ext_modules,

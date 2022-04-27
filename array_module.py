@@ -20,7 +20,7 @@ def zeros(shape: tuple[int]) -> np.ndarray:
     elif len(shape) == 1:
         return create_array.create_array.zeros_1d(shape[0])
     elif len(shape) == 2:
-        return create_array.create_array.zeros_2d(shape[0], shape[1])
+        return create_array.create_array.zeros_2d(shape[0], shape[1]).T
 
 
 def random_text(list_size: int, string_size: int) -> np.ndarray:
@@ -48,7 +48,7 @@ def repeat(obj: any, amount_of_times: int) -> np.ndarray:
             float_val=obj, length=amount_of_times)
     elif isinstance(obj, bool):
         return array_operations.array_operations.repeat_bool(
-            bool_val=obj, length=amount_of_times)
+            bool_val=obj, length=amount_of_times).astype(dtype=np.bool)
 
 
 def sort(array: np.ndarray) -> np.ndarray:
@@ -80,7 +80,7 @@ def gaussian(avg: float, std: float, shape: tuple[int]) -> np.ndarray:
     elif len(shape) == 1:
         return create_array.create_array.rand_gaussian_1d(shape[0], avg, std)
     elif len(shape) == 2:
-        return create_array.create_array.rand_gaussian__2d(shape[0], shape[1], avg, std)
+        return create_array.create_array.rand_gaussian__2d(shape[0], shape[1], avg, std).T
 
 
 def meshgrid(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray]:
@@ -134,4 +134,4 @@ def random_uniform(min: float, max: float, shape: tuple[int]) -> np.ndarray:
     elif len(shape) == 1:
         return create_array.create_array.rand_uniform_1d(shape[0], min, max)
     elif len(shape) == 2:
-        return create_array.create_array.rand_uniform_2d(shape[0], shape[1], min, max)
+        return create_array.create_array.rand_uniform_2d(shape[0], shape[1], min, max).T
