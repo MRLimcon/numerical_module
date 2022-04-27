@@ -18,4 +18,5 @@ def simple_fit(array: np.ndarray, type: str = "linear") -> tuple[np.ndarray]:
         init_array = np.log(array)
         result = optimizer.optimizer.linear_least_squares(
             matrix=init_array, n=array.shape[1])
+        result[:, 1] = np.exp(result[:, 1])
     return result[0], result[1]
