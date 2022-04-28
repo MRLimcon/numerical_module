@@ -88,6 +88,18 @@ module array_operations
 
     end function remove_outliers
 
+    function find_peaks(vector, lenx) result(bool_vector)
+      implicit none
+
+      integer, intent(in) :: lenx
+      real, intent(in) :: vector(lenx)
+      logical :: bool_vector(lenx)
+
+      bool_vector = 0
+      bool_vector(2:lenx-1) = (vector(2:lenx-1) > vector(1:lenx-2)) .and. &
+          (vector(2:lenx-1) > vector(3:lenx))
+    end function find_peaks
+
     function meshgrid(x, lenx, y, leny) result(array)
       implicit none
       integer, intent(in) :: lenx, leny
